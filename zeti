@@ -1,0 +1,15 @@
+#!/usr/bin/env bash	
+export TITLE="$1"
+export TAGS="$2"
+export DATE="$(date +"%b %e, %Y")"
+. lib/mo # loads the "mo" function
+cat << EOF | mo
+<html>
+<head><title>{{TITLE}}</title></head>
+<h1>{{TITLE}}</h1>
+<ul>
+  <li>{{TAGS}}</li>
+  <li>{{DATE}}</li>
+</ul>
+</html>
+EOF

@@ -41,6 +41,9 @@ _command_exists() {
 _function_exists() {
   [[ "$(type -t "${1:-}")" == 'function' ]]
 }
+is_in_git_repo() {
+  git rev-parse HEAD > /dev/null 2>&1
+}
 _contains() {
   local _query="${1:-}"
   shift
@@ -69,6 +72,24 @@ init() {
   else 
 	echo ">> you still need to create the directory."
   fi
+}
+
+desc tags <<HEREDOC
+Usage:
+  $_ME tags t|[<tags>]
+
+Description:
+  With no argument, list all tags found in notes. Otherwise list all notes containing any of the given tags.
+HEREDOC
+tags() {
+  local _tag="${1:}"
+for __arg in "${@:-}"
+do
+
+if [ -z "$@" ]; then
+  f
+
+  printf "{_tag} %s!\n"
 }
 
 _init

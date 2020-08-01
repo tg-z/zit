@@ -1,0 +1,9 @@
+#!/usr/bin/env bash	
+export CMD=( init list backlinks new open sync show tags )
+. lib/mo # loads the "mo" function
+cat << EOF | mo
+zet help:
+{{#CMD}}
+  {{.}}
+{{/CMD}}
+EOF
