@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+_zet () {
+    : "${ZETTEL_DIR:=${XDG_DATA_HOME:-$HOME/.local/share}/zet}"
+
+    local cur commands
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    commands="backlinks show open list sync new tags help preview"
+
+    if [ "$COMP_CWORD" -eq 1 ]; then
+        while read -r line; do COMPREPLY+=("$line"); done < <(compgen -W "$commands" -- "$cur")
+        return 0
+    fi
+
+    if [ ! -d "$ZETTEL_DIR" ]; then
+        return
+    fi
+
+    local zettels
+    zettels=$(compgen -f "$ZETTEL_DIR/" | sed -E -e 's/.*\///g' -e '/^[0-9]{14}/!d' -e 's/\..*$//')
+
+    case "${COMP_WORDS[1]}" in
+        bl|backlinks|s|sh|show|o|open|p|pre|prev|preview)
+            # compgen only returns prefix-matches, but we want to return
+            # matches anywhere in the substring, so use grep to generate the
+            # results
+            while IFS='' read -r line; do
+                COMPREPLY+=("$line")
+            done < <(printf '%s\n' "$zettels" | grep -iF "$cur")
+            ;;
+        t|tag|tags)
+            local tags
+            tags=$(awk '/^tags:/ {$1="";print}' "$ZETTEL_DIR"/* | tr ',' '\n' | awk '{$1=$1}1' | sort -u)
+
+            # Prioritize prefix matches but if none exist, fallback to matching
+            # any substring
+            matches=$(compgen -W "$tags" -- "$cur")
+            if [ -z "$matches" ]; then
+                matches=$(printf '%s\n' "$tags" | grep -iF "$cur")
+            fi
+
+            while IFS='' read -r line; do
+                COMPREPLY+=("$line")
+            done < <(printf '%s\n' "$matches")
+            ;;
+        *)
+            return
+            ;;
+    esac
+} &&
+complete -F _zet zet

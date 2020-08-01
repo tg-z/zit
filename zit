@@ -1,20 +1,30 @@
 #!/usr/bin/env bash
 ###############################################################################
-# zit - a bask script
+# zit - a zettelkasten management tool
 #
-# Get bask:
+# get bask:
 #   https://github.com/xwmx/bask
+# get zit:
+#   https://github.com/tg-z/zit
 #
-# Add this script and the bask program to your $PATH.
+# add this script and the bask program to your $PATH.
 #
 # For usage information, run:
 #   zit help
 ###############################################################################
 
-# Load bask
-#
+# load bask
+
 # https://github.com/koalaman/shellcheck/wiki/SC1090
 # shellcheck source=/dev/null
+
+set -o nounset
+set -o errexit
+set -o pipefail
+IFS=$'\n\t'
+
+DEFAULT_COMMAND="${DEFAULT_COMMAND:-help}"
+
 source "$(command -v bask)"
 
 desc "init" <<HEREDOC
@@ -24,12 +34,41 @@ Usage:
 Description:
   With no argument, list all notes. Otherwise list notes containing any of the given patterns.
 HEREDOC
+
+_command_exists() {
+  hash "${1}" 2>/dev/null
+}
+_function_exists() {
+  [[ "$(type -t "${1:-}")" == 'function' ]]
+}
+_contains() {
+  local _query="${1:-}"
+  shift
+
+  if [[ -z "${_query}"  ]] ||
+     [[ -z "${*:-}"     ]]
+  then
+    return 1
+  fi
+
+  for __element in "${@}"
+  do
+    [[ "${__element}" == "${_query}" ]] && return 0
+  done
+
+  return 1
+}
 init() {
   echo ">> hi from zit!"
   if [ -z "$ZETTEL_DIR" ]; then
-	echo "setup your zettel dir: do this by adding 'export ZETTEL_DIR='~/.local/share/zet'' or something similar to your zshrc/bashrc."
-	exit 1
-  fi 
+	echo "setup your zettel by adding 'export ZETTEL_DIR='~/.local/share/zet'' or something similar to your zshrc/bashrc."
+	echo "by default, the directory is set to ${XDG_DATA_HOME:-$HOME/.local/share/zet}"
+  exit 1
+  elif [ -d "$ZETTEL_DIR" ]; then
+	echo "your zettel is set up + ready to go :)"
+  else 
+	echo "you still need to create the directory."
+  fi
 }
 
 _init
