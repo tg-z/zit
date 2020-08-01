@@ -65,9 +65,9 @@ init() {
 	echo "by default, the directory is set to ${XDG_DATA_HOME:-$HOME/.local/share/zet}"
   exit 1
   elif [ -d "$ZETTEL_DIR" ]; then
-	echo "your zettel is set up + ready to go :)"
+	echo ">> your zettel is set up + ready to go :)"
   else 
-	echo "you still need to create the directory."
+	echo ">> you still need to create the directory."
   fi
 }
 
