@@ -12,22 +12,22 @@ tags: {{TAGS}}
 
 # {{TITLE}}
 
-user, {{USER}}
-shell, {{SHELL}}
-browser, {{BROWSER}}
-terminal, {{TERMINAL}}
-reader, {{READER}}
-editor, {{EDITOR}}
-url launcher, {{URL_LAUNCHER}}
-music player, {{MUSIC_PLAYER}}
-player, {{VIDEO}}
-wm, {{WM}}
-file manager, {{FILE}}
-image viewer, {{IMAGE}}
-mail client, {{MAIL_CLIENT}}
-os, {{OS}}
-newsreader, {{NEWSREADER}}
-pager, {{PAGER}}
-calendar, {{CALENDAR}}
+|user| {{USER}} |
+|shell| {{SHELL}}|
+|browser| {{BROWSER}}|
+|terminal| {{TERMINAL}}|
+|reader| {{READER}}|
+|editor| {{EDITOR}}|
+|url launcher| {{URL_LAUNCHER}}|
+|music player| {{MUSIC_PLAYER}}|
+|player| {{VIDEO}}|
+|wm| {{WM}}|
+|file manager| {{FILE}}|
+|image viewer| {{IMAGE}}|
+|mail client| {{MAIL_CLIENT}}|
+|os| {{OS}}|
+|newsreader| {{NEWSREADER}}|
+|pager| {{PAGER}}|
+|calendar| {{CALENDAR}}|
 
 EOF
