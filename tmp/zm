@@ -1,0 +1,28 @@
+#!/usr/bin/env bash	
+export TITLE="$1"
+export TAGS="$2"
+export BODY=""
+export DATE="$(date +"%b %e, %Y")"
+. ../lib/mo # loads the "mo" function
+cat << EOF | mo --source=env.vars
+---
+title: {{TITLE}}
+date: {{DATE}}
+tags: {{TAGS}}
+...
+
+# {{TITLE}}
+
+user, {{USER}}
+shell, {{SHELL}}
+browser, {{BROWSER}}
+terminal, {{TERMINAL}}
+reader, {{READER}}
+editor, {{EDITOR}}
+player, {{VIDEO}}
+wm, {{YABAI}}
+os, {{DARWIN}}
+newsreader, {{NEWSREADER}}
+pager, {{PAGER}}
+
+EOF
