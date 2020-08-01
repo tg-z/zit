@@ -1,0 +1,10 @@
+desc "hello" <<HEREDOC
+Usage:
+  bask hello
+
+Description:
+  Print a greeting.
+HEREDOC
+hello() {
+  echo ">> Hello from bask!"
+}

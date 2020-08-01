@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+###############################################################################
+# zit - a bask script
+#
+# Get bask:
+#   https://github.com/xwmx/bask
+#
+# Add this script and the bask program to your $PATH.
+#
+# For usage information, run:
+#   zit help
+###############################################################################
+
+# Load bask
+#
+# https://github.com/koalaman/shellcheck/wiki/SC1090
+# shellcheck source=/dev/null
+source "$(command -v bask)"
+
+desc "init" <<HEREDOC
+Usage:
+  $_ME init
+
+Description:
+  With no argument, list all notes. Otherwise list notes containing any of the given patterns.
+HEREDOC
+init() {
+  echo ">> hi from zit!"
+  if [ -z "$ZETTEL_DIR" ]; then
+	echo "setup your zettel dir: do this by adding 'export ZETTEL_DIR='~/.local/share/zet'' or something similar to your zshrc/bashrc."
+	exit 1
+  fi 
+}
+
+_init
