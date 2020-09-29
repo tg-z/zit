@@ -8,7 +8,7 @@ cat << EOF | mo --source=env.vars
 title: {{TITLE}}
 date: {{DATE}}
 tags: {{TAGS}}
-...
+---
 
 # {{TITLE}}
 
