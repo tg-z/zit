@@ -1,9 +1,11 @@
 | ---               |           |
 |-------------------|-----------|
-| title: sys_data   |           |
-| date: Aug  1 2020 |           |
-| tags: cfg         |           |
-| ...               |           |
+| title: macos_rice |           |
+| date: Sep 28      | 2020      |
+| tags: unix        |           |
+| ---               |           |
+|                   |           |
+| # macos_rice      |           |
 |                   |           |
 | user              | bluetooth |
 | shell             | zsh       |
