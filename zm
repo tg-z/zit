@@ -1,17 +1,20 @@
-#!/usr/bin/env bash	
-export TITLE="$1"
-export TAGS="$2"
-export BODY=""
-export DATE="$(date +"%b %e, %Y")"
+#!/usr/bin/env bash
+IFS=$'\n\t'
+
+TITLE="${1:-new-zet}"
+TAGS="${2:-}"
+DATE="$(date +"%b %e, %Y")"
+DEFAULT_COMMAND="${DEFAULT_COMMAND:-help}"
+
 . lib/mo # loads the "mo" function
 cat << EOF | mo
 ---
 title: {{TITLE}}
 date: {{DATE}}
 tags: {{TAGS}}
-...
+---
 
 # {{TITLE}}
-{{#BODY
-/}}
+
+
 EOF
