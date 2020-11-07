@@ -1,9 +1,16 @@
-#!/usr/bin/env bash	
-export CMD=( init list backlinks new open sync show tags )
-. lib/mo # loads the "mo" function
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+export CMD=( init list backlinks new open sync show tags help )
+source "${0%/*}"/lib/mo
 cat << EOF | mo
-zet help:
+usage: zit COMMAND
+
+available commands:
 {{#CMD}}
   {{.}}
 {{/CMD}}
+
+use "zit help COMMAND" for more information about a command.
 EOF

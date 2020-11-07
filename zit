@@ -81,15 +81,16 @@ Usage:
 Description:
   With no argument, list all tags found in notes. Otherwise list all notes containing any of the given tags.
 HEREDOC
-tags() {
-  local _tag="${1:}"
-for __arg in "${@:-}"
-do
 
-if [ -z "$@" ]; then
-  f
+# tags() {
+#   local _tag="${1:}"
+# for __arg in "${@:-}"
+# do
 
-  printf "{_tag} %s!\n"
-}
+# if [ -z "$@" ]; then
+#   f
+
+#   printf "{_tag} %s!\n"
+# }
 
 _init
