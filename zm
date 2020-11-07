@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 IFS=$'\n\t'
 
-TITLE="${1:-new-zet}"
-TAGS="${2:-}"
-DATE="$(date +"%b %e, %Y")"
-DEFAULT_COMMAND="${DEFAULT_COMMAND:-help}"
+export ID="$(date +%Y%m%d%H%M%S)"
+export TITLE="${1:-new-zettel}"
+export DATE="$(date +"%B %d, %Y")"
+export TAGS="$(date +%Y)"
 
-. lib/mo # loads the "mo" function
-cat << EOF | mo
+. ../lib/mo # loads the "mo" function
+cat << EOF | mo --source=env.vars
 ---
+id: {{ID}}
 title: {{TITLE}}
 date: {{DATE}}
 tags: {{TAGS}}
@@ -18,3 +19,6 @@ tags: {{TAGS}}
 
 
 EOF
+
+# python3.9 ../zet.py
+
