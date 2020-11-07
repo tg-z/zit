@@ -6,8 +6,8 @@ export TITLE="${1:-new-zettel}"
 export DATE="$(date +"%B %d, %Y")"
 export TAGS="$(date +%Y)"
 
-. ../lib/mo # loads the "mo" function
-cat << EOF | mo --source=env.vars
+. ./lib/mo
+cat << EOF | mo
 ---
 id: {{ID}}
 title: {{TITLE}}
@@ -20,5 +20,5 @@ tags: {{TAGS}}
 
 EOF
 
-# python3.9 ../zet.py
+# python3.9 zet.py
 
