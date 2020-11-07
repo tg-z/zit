@@ -32,6 +32,14 @@ Usage:
   $_ME init
 
 Description:
+  With no argument, checks if ZETTEL_DIR exists. If it has not been set up yet it will create a directory in the XDG_DATA_HOME called zet.
+HEREDOC
+
+desc "list" <<HEREDOC
+Usage:
+  $_ME ls|[list]
+
+Description:
   With no argument, list all notes. Otherwise list notes containing any of the given patterns.
 HEREDOC
 
@@ -64,8 +72,8 @@ _contains() {
 init() {
   echo ">> hi from zit!"
   if [ -z "$ZETTEL_DIR" ]; then
-	echo "setup your zettel by adding 'export ZETTEL_DIR='~/.local/share/zet'' or something similar to your zshrc/bashrc."
-	echo "by default, the directory is set to ${XDG_DATA_HOME:-$HOME/.local/share/zet}"
+	echo "setup your zettel by adding 'export ZETTEL_DIR='~/.local/share/zet'' or add something similar to your zshrc/bashrc."
+	echo "by default, the directory is set to ${XDG_DATA_HOME:-$HOME/.local/share}/zet"
   exit 1
   elif [ -d "$ZETTEL_DIR" ]; then
 	echo ">> your zettel is set up + ready to go :)"
@@ -83,14 +91,40 @@ Description:
 HEREDOC
 
 # tags() {
-#   local _tag="${1:}"
-# for __arg in "${@:-}"
-# do
+#   local zettels
+#   zettels=$(compgen -f "$ZETTEL_DIR/" | sed -E -e 's/.*\///g' -e '/^[0-9]{14}/!d' -e 's/\..*$//'
 
-# if [ -z "$@" ]; then
-#   f
+#   case "${COMP_WORDS[1]}" in
+# 	  bl|backlinks|s|sh|show|o|open|p|pre|prev|preview)
+# 		  # compgen only returns prefix-matches, but we want to return
+# 		  # matches anywhere in the substring, so use grep to generate the
+# 		  # results
+# 		  while IFS='' read -r line; do
+# 			  COMPREPLY+=("$line")
+# 		  done < <(printf '%s\n' "$zettels" | grep -iF "$cur")
+# 		  ;;
+#   local tags
+#   tags=$(awk '/^tags:/ {$1="";print}' "$ZETTEL_DIR"/* | tr ',' '\n' | awk '{$1=$1}1' | sort -u)
+#   # Prioritize prefix matches but if none exist, fallback to matching any substring
+#   matches=$(compgen -W "$tags" -- "$cur")
+#   if [ -z "$matches" ]; then
+#     matches=$(printf '%s\n' "$tags" | grep -iF "$cur")
+#   fi
 
-#   printf "{_tag} %s!\n"
+#   while IFS='' read -r line; do
+# 	  COMPREPLY+=("$line")
+#   done < <(printf '%s\n' "$matches")
 # }
+
+list() {
+    cd "${ZETTEL_DIR}"
+    fd 20 | sd '.md' '' | sd '-' ' '
+}
+
+new() {
+    ./zn > "${ZETTEL_DIR}"/"${zettel_id_format}"-"${zettel_title}".md
+    
+}
+
 
 _init
