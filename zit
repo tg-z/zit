@@ -24,6 +24,17 @@ set -o pipefail
 IFS=$'\n\t'
 
 DEFAULT_COMMAND="${DEFAULT_COMMAND:-help}"
+export zettel_id_format="$(date +%Y%m%d%H%M%S)"
+export ZET_ID="${zettel_id_format}"
+export zettel_title="${1:-new-zettel}"
+export zettel_date_format="$(date +"%B %d, %Y")"
+export zettel_tag_format="$(date +%Y)"
+
+export ZET_ID="${zettel_id_format}"
+export ZET_TITLE="${zettel_title}"
+export ZET_DATE="${zettel_date_format}"
+export ZET_TAGS="${zettel_tag_format}"
+
 
 source "$(command -v bask)"
 
@@ -82,12 +93,40 @@ init() {
   fi
 }
 
-desc tags <<HEREDOC
+list() {
+    cd "${ZETTEL_DIR}"
+    fd 20 | sd '.md' '' | sd '-' ' '
+}
+
+new() {
+    cd "${ZETTEL_DIR}"
+    source "${0%/*}"/lib/mo
+cat <<EOF | mo
+---
+id: {{ZET_ID}}
+title: {{ZET_TITLE}}
+date: {{ZET_DATE}}
+tags: {{ZET_TAGS}}
+---
+
+# {{ZET_TITLE}}
+
+EOF
+}
+
+desc "tags" <<HEREDOC
 Usage:
-  $_ME tags t|[<tags>]
+  $_ME t|tags [TAG [TAG ...]]
 
 Description:
   With no argument, list all tags found in notes. Otherwise list all notes containing any of the given tags.
+HEREDOC
+
+desc "new" <<HEREDOC
+Usage: $_ME n|new <TITLE>
+
+Description:
+  Create a new note with the given title.
 HEREDOC
 
 # tags() {
@@ -115,16 +154,4 @@ HEREDOC
 # 	  COMPREPLY+=("$line")
 #   done < <(printf '%s\n' "$matches")
 # }
-
-list() {
-    cd "${ZETTEL_DIR}"
-    fd 20 | sd '.md' '' | sd '-' ' '
-}
-
-new() {
-    ./zn > "${ZETTEL_DIR}"/"${zettel_id_format}"-"${zettel_title}".md
-    
-}
-
-
 _init
