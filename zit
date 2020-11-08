@@ -129,6 +129,16 @@ Description:
   Create a new note with the given title.
 HEREDOC
 
+tags() {
+	local zettels
+	zettels="$(fd 20 -e md "$ZETTEL_DIR" | fgrep "$tags")"
+	local tags
+	tags="$(awk '/^tags:/ {$1="";print}' "$ZETTEL_DIR"/* | tr ',' '\n' | awk '{$1=$1}1' | sort -u)"
+	while IFS='' read -r line; do
+	    COMPREPLY+=("$line")
+	done < <(printf )
+}
+
 # tags() {
 #   local zettels
 #   zettels=$(compgen -f "$ZETTEL_DIR/" | sed -E -e 's/.*\///g' -e '/^[0-9]{14}/!d' -e 's/\..*$//'
