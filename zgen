@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+export zettel_files=( 20200628174525-csula.md 20200701025446-guerrilla_open_access_manifesto.md 20200701025913-csh_whynot.md 20200701030046-songs.md 20200701030211-computer_freedom.md 20200701030402-csula_drug_policy.md 20200701030626-school_beta_gnutard.md 20200701030831-unix_philosophy.md 20200703151720-torrents.md 20200707070536-terms.md 20200707225803-links.md 20200714162158-surfingkeys.md 20200715232209-mastering_jq-bash_tricks.md 20200715232602-mastering_jq_1.md 20200726212746-movies.md 20200920024554-promnesia_export_guide.md 20200922130457-awk_one-liners.md 20200922131216-crontab_guide.md 20200922131440-scripting_snippets.md 20200922132321-learn_bash.md 20200923163040-hacker-laws.md 20200926212511-apps.md 20200927223345-ansicode.md 20200928201119-csula_class_materials.md 20201016180035-obsidian-custom-uri.md 20201020084829-note-taking_when_reading_the_web_and_rss.md 20201028213956-todo.md 20201107120910-it-isnt-always-easy.md )
+
+export zettel_tags=( 2020 awk bash cli csula dev edu info json links mac manifesto music promnesia shell todo unix )
+
+export zettel_id_format="$(date +%Y%m%d%H%M%S)"
+export zettel_title="${1:-generated index}"
+export zettel_date_format="$(date +"%B %d, %Y")"
+export zettel_tag_format="$(date +%Y)"
+
+ZET_ID="${zettel_id_format}"
+ZET_TITLE="${zettel_title}"
+ZET_DATE="${zettel_date_format}"
+ZET_TAGS="${zettel_tag_format}"
+
+source "${0%/*}"/lib/mo
+cat <<EOF | mo
+---
+id: {{ZET_ID}}
+title: {{ZET_TITLE}}
+date: {{ZET_DATE}}
+tags: {{ZET_TAGS}}
+---
+
+# {{ZET_TITLE}}
+
+{{#zettel_files}}
+  - [{{.}}]({{.}})
+{{/zettel_files}}
+
+# generated tags
+
+| tags | # |
+|---|---|
+{{#zettel_tags}}
+| {{.}} |  |
+{{/zettel_tags}}
+
+
+EOF
