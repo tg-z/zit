@@ -130,38 +130,9 @@ Description:
 HEREDOC
 
 tags() {
-	local zettels
-	zettels="$(fd 20 -e md "$ZETTEL_DIR" | fgrep "$tags")"
-	local tags
-	tags="$(awk '/^tags:/ {$1="";print}' "$ZETTEL_DIR"/* | tr ',' '\n' | awk '{$1=$1}1' | sort -u)"
-	while IFS='' read -r line; do
-	    COMPREPLY+=("$line")
-	done < <(printf )
+  local tags
+  tags="$(awk '/^tags:/ {$1="";print}' "$ZETTEL_DIR"/* | tr ',' '\n' | awk '{$1=$1}1' | sort -u)"
+ awk '/^tags:/ {$1="";print}' "$ZETTEL_DIR"/2020* | tr ',' '\n' | awk '{$1=$1}1' | sort -u 
 }
 
-# tags() {
-#   local zettels
-#   zettels=$(compgen -f "$ZETTEL_DIR/" | sed -E -e 's/.*\///g' -e '/^[0-9]{14}/!d' -e 's/\..*$//'
-
-#   case "${COMP_WORDS[1]}" in
-# 	  bl|backlinks|s|sh|show|o|open|p|pre|prev|preview)
-# 		  # compgen only returns prefix-matches, but we want to return
-# 		  # matches anywhere in the substring, so use grep to generate the
-# 		  # results
-# 		  while IFS='' read -r line; do
-# 			  COMPREPLY+=("$line")
-# 		  done < <(printf '%s\n' "$zettels" | grep -iF "$cur")
-# 		  ;;
-#   local tags
-#   tags=$(awk '/^tags:/ {$1="";print}' "$ZETTEL_DIR"/* | tr ',' '\n' | awk '{$1=$1}1' | sort -u)
-#   # Prioritize prefix matches but if none exist, fallback to matching any substring
-#   matches=$(compgen -W "$tags" -- "$cur")
-#   if [ -z "$matches" ]; then
-#     matches=$(printf '%s\n' "$tags" | grep -iF "$cur")
-#   fi
-
-#   while IFS='' read -r line; do
-# 	  COMPREPLY+=("$line")
-#   done < <(printf '%s\n' "$matches")
-# }
 _init
