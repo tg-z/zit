@@ -101,6 +101,18 @@ list() {
 new() {
     cd "${ZETTEL_DIR}"
     source "${0%/*}"/lib/mo
+    local zettel_id_format="$(date +%Y%m%d%H%M%S)"
+    local ZET_ID="${zettel_id_format}"
+    local zettel_title="${1:-new-zettel}"
+    local zettel_date_format="$(date +"%B %d, %Y")"
+    local zettel_tag_format="$(date +%Y)"
+
+    local ZET_ID="${zettel_id_format}"
+    local ZET_TITLE="${zettel_title}"
+    local ZET_DATE="${zettel_date_format}"
+    local ZET_TAGS="${zettel_tag_format}"
+
+
 cat <<EOF | mo
 ---
 id: {{ZET_ID}}
@@ -129,10 +141,25 @@ Description:
   Create a new note with the given title.
 HEREDOC
 
+desc "sync" <<HEREDOC
+Usage: $_ME sync
+
+Description:
+  Synchronize ZETTEL_DIR with the git remote, if one is configured.
+HEREDOC
+
+
 tags() {
   local tags
-  tags="$(awk '/^tags:/ {$1="";print}' "$ZETTEL_DIR"/* | tr ',' '\n' | awk '{$1=$1}1' | sort -u)"
- awk '/^tags:/ {$1="";print}' "$ZETTEL_DIR"/2020* | tr ',' '\n' | awk '{$1=$1}1' | sort -u 
+  tags="$(awk '/^tags:/ {$1="";print}' "$ZETTEL_DIR"/20* | tr ',' '\n' | awk '{$1=$1}1' | sort -u)"
+ awk '/^tags:/ {$1="";print}' "$ZETTEL_DIR"/20* | tr ',' '\n' | awk '{$1=$1}1' | sort -u 
 }
 
+sync() {
+  git rev-parse HEAD > /dev/null 2>&1
+  git commit -am "auto commit + push on $(date)"
+  echo "committing changes"
+  git push
+  echo "pushing changes"
+}
 _init
