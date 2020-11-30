@@ -60,7 +60,7 @@ _command_exists() {
 _function_exists() {
   [[ "$(type -t "${1:-}")" == 'function' ]]
 }
-is_in_git_repo() {
+_is_in_git_repo() {
   git rev-parse HEAD > /dev/null 2>&1
 }
 _contains() {
@@ -79,10 +79,6 @@ _contains() {
   done
 
   return 1
-}
-_count_ids() {
-  cd "${ZETTEL_DIR}"
-  fd 20 -e md | sed 's/\([0-9]*\).*/\1/'
 }
 
 init() {
@@ -154,6 +150,16 @@ Description:
   Synchronize ZETTEL_DIR with the git remote, if one is configured.
 HEREDOC
 
+desc "preview" <<HEREDOC
+Usage: $_ME preview
+
+Description:
+  View notes as HTML.
+HEREDOC
+
+preview() {
+  cd "${ZETTEL_DIR}"
+}
 
 tags() {
   local tags
