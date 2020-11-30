@@ -81,6 +81,7 @@ _contains() {
   return 1
 }
 
+
 init() {
   echo ">> hi from zit!"
   if [ -z "$ZETTEL_DIR" ]; then
@@ -157,6 +158,17 @@ Description:
   View notes as HTML.
 HEREDOC
 
+desc "complex" <<HEREDOC
+Usage:
+  $_ME complex [<name>] [--farewell]
+
+Options:
+  --farewell  Print "Goodbye, World!"
+
+Description:
+  Print the greeting, "Hello, World!"
+HEREDOC
+
 preview() {
   cd "${ZETTEL_DIR}"
 }
@@ -165,6 +177,31 @@ tags() {
   local tags
   tags="$(awk '/^tags:/ {$1="";print}' "$ZETTEL_DIR"/20* | tr ',' '\n' | awk '{$1=$1}1' | sort -u)"
  awk '/^tags:/ {$1="";print}' "$ZETTEL_DIR"/20* | tr ',' '\n' | awk '{$1=$1}1' | sort -u 
+}
+
+complex() {
+  local _greeting="Hello"
+  local _name="World"
+
+  for __arg in "${@:-}"
+  do
+    case "${__arg}" in
+      --farewell)
+        _greeting="Goodbye"
+        ;;
+      -*)
+        _exit_1 printf "Unexpected option: %s\n" "${__arg}"
+        ;;
+      *)
+        if [[ "${_name}" == "World" ]] && [[ -n "${__arg:-}" ]]
+        then
+          _name="${__arg}"
+        fi
+        ;;
+    esac
+  done
+
+  printf "%s, %s!\n" "${_greeting}" "${_name}"
 }
 
 sync() {
