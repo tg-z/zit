@@ -24,17 +24,7 @@ set -o pipefail
 IFS=$'\n\t'
 
 DEFAULT_COMMAND="${DEFAULT_COMMAND:-help}"
-export zettel_id_format="$(date +%Y%m%d%H%M%S)"
-export ZET_ID="${zettel_id_format}"
-export zettel_title="${1:-new-zettel}"
-export zettel_date_format="$(date +"%B %d, %Y")"
-export zettel_tag_format="$(date +%Y)"
-
-export ZET_ID="${zettel_id_format}"
-export ZET_TITLE="${zettel_title}"
-export ZET_DATE="${zettel_date_format}"
-export ZET_TAGS="${zettel_tag_format}"
-
+_VERSION="0.0.1"
 
 source "$(command -v bask)"
 
@@ -53,81 +43,6 @@ Usage:
 Description:
   With no argument, list all notes. Otherwise list notes containing any of the given patterns.
 HEREDOC
-
-_command_exists() {
-  hash "${1}" 2>/dev/null
-}
-_function_exists() {
-  [[ "$(type -t "${1:-}")" == 'function' ]]
-}
-_is_in_git_repo() {
-  git rev-parse HEAD > /dev/null 2>&1
-}
-_contains() {
-  local _query="${1:-}"
-  shift
-
-  if [[ -z "${_query}"  ]] ||
-     [[ -z "${*:-}"     ]]
-  then
-    return 1
-  fi
-
-  for __element in "${@}"
-  do
-    [[ "${__element}" == "${_query}" ]] && return 0
-  done
-
-  return 1
-}
-
-
-init() {
-  echo ">> hi from zit!"
-  if [ -z "$ZETTEL_DIR" ]; then
-	echo "setup your zettel by adding 'export ZETTEL_DIR='~/.local/share/zet'' or add something similar to your zshrc/bashrc."
-	echo "by default, the directory is set to ${XDG_DATA_HOME:-$HOME/.local/share}/zet"
-  exit 1
-  elif [ -d "$ZETTEL_DIR" ]; then
-	echo ">> your zettel is set up + ready to go :)"
-  else 
-	echo ">> you still need to create the directory."
-  fi
-}
-
-list() {
-    cd "${ZETTEL_DIR}"
-    fd 20 -e md | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//'
-}
-
-new() {
-    cd "${ZETTEL_DIR}"
-    source "${0%/*}"/lib/mo
-    local zettel_id_format="$(date +%Y%m%d%H%M%S)"
-    local ZET_ID="${zettel_id_format}"
-    local zettel_title="${1:-new-zettel}"
-    local zettel_date_format="$(date +"%B %d, %Y")"
-    local zettel_tag_format="$(date +%Y)"
-
-    local ZET_ID="${zettel_id_format}"
-    local ZET_TITLE="${zettel_title}"
-    local ZET_DATE="${zettel_date_format}"
-    local ZET_TAGS="${zettel_tag_format}"
-
-
-cat <<EOF | mo
----
-id: {{ZET_ID}}
-title: {{ZET_TITLE}}
-date: {{ZET_DATE}}
-tags:
-- {{ZET_TAGS}}
----
-
-# {{ZET_TITLE}}
-
-EOF
-}
 
 desc "tags" <<HEREDOC
 Usage:
@@ -175,6 +90,72 @@ Options:
 Description:
   Print the greeting, "Hello, World!"
 HEREDOC
+
+_command_exists() {
+  hash "${1}" 2>/dev/null
+}
+_function_exists() {
+  [[ "$(type -t "${1:-}")" == 'function' ]]
+}
+_is_in_git_repo() {
+  git rev-parse HEAD > /dev/null 2>&1
+}
+_contains() {
+  local _query="${1:-}"
+  shift
+
+  if [[ -z "${_query}"  ]] ||
+     [[ -z "${*:-}"     ]]
+  then
+    return 1
+  fi
+
+  for __element in "${@}"
+  do
+    [[ "${__element}" == "${_query}" ]] && return 0
+  done
+
+  return 1
+}
+_join() {
+  local _delimiter="${1}"
+  shift
+  printf "%s" "${1}"
+  shift
+  printf "%s" "${@/#/${_delimiter}}" | tr -d '[:space:]'
+}
+_debug() {
+  if [[ "${_USE_DEBUG:-"0"}" -eq 1 ]]
+  then
+    __DEBUG_COUNTER=$((__DEBUG_COUNTER+1))
+    {
+      # Prefix debug message with "bug (U+1F41B)"
+      printf "🐛  %s " "${__DEBUG_COUNTER}"
+      "${@}"
+      printf "―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――\\n"
+    } 1>&2
+  fi
+}
+
+init() {
+  echo ">> hi from zit!"
+  if [ -z "$ZETTEL_DIR" ]; then
+	echo "setup your zettel by adding 'export ZETTEL_DIR='~/.local/share/zet'' or add something similar to your zshrc/bashrc."
+	echo "by default, the directory is set to ${XDG_DATA_HOME:-$HOME/.local/share}/zet"
+  exit 1
+  elif [ -d "$ZETTEL_DIR" ]; then
+	echo ">> your zettel is set up + ready to go :)"
+  else 
+	echo ">> you still need to create the directory."
+  fi
+}
+
+list() {
+    cd "${ZETTEL_DIR}"
+    fd 20 -e md | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//'
+}
+
+
 
 preview() {
   cd "${ZETTEL_DIR}"
@@ -224,6 +205,87 @@ push() {
   cd "${ZETTEL_DIR}"
   git rev-parse HEAD > /dev/null 2>&1
   git push > /dev/null 2>&1
-  echo "pushing changes..."
+  echo "changes pushed"
 }
 _init
+
+# new
+
+_generate_zettel() {
+  local _id_format
+  _id_format="$(date +%Y%m%d%H%M%S)"
+  if [[ -f "${_id_format}-${1}" ]]
+  then
+    printf ">> zettel already exists in this location.\\n"
+    exit 0
+  fi
+
+  local _content
+  read -r -d '' _content <<TEMPLATE || true
+---
+id: $(date +%Y%m%d%H%M%S)
+title: ${zettel_title}
+date: $(date +"%B %d, %Y")
+tags:
+- $(date +%Y)
+---
+
+# ${zettel_title}
+
+TEMPLATE
+
+  printf ">> creating new zettel in %s\\n" "${ZETTEL_DIR}"
+  printf "%s\\n" "${_content}" >> "Baskfile"
+  exit 0
+}
+
+_generate_zet() {
+  if [[ -f "${1:-}" ]]
+  then
+    printf ">> %s already exists\\n" "${1}"
+    exit 0
+  fi
+
+  local _script_basename
+  _script_basename="$(basename "${1}")"
+  _debug printf \
+    "_generate_bask_script() \${_script_basename}: %s\\n" \
+    "${_script_basename}"
+
+  local _content
+  read -r -d '' _content <<TEMPLATE || true
+---
+id: $(date +%Y%m%d%H%M%S)
+title: ${zettel_title}
+date: $(date +"%B %d, %Y")
+tags:
+- $(date +%Y)
+---
+
+# ${zettel_title}
+
+TEMPLATE
+
+  printf ">> creating new zet: %s\\n" "${1}"
+  printf "%s\\n" "${_content}" >> "${1}"
+  exit 0
+}
+
+new() {
+  printf "new() \${PWD}: %s\\n" "${ZETTEL_DIR}"
+
+  if [[ -n "${1:-}" ]]
+  then
+    _generate_zet "${1}"
+  else
+    _generate_zettel
+  fi
+}
+x-new() {
+    cd "${ZETTEL_DIR}"
+    local zettel_id_format="$(date +%Y%m%d%H%M%S)"
+    local ZET_ID="${zettel_id_format}"
+    local zettel_title="${1:-new-zettel}"
+    local zettel_date_format="$(date +"%B %d, %Y")"
+    local zettel_tag_format="$(date +%Y)"
+}

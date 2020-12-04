@@ -2,7 +2,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-export CMD=( init list backlinks new open sync show tags help )
+export CMD=( init list backlinks new open sync show push preview tags help )
 source "${0%/*}"/lib/mo
 cat << EOF | mo
 usage: zit COMMAND
