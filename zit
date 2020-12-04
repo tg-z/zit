@@ -212,9 +212,10 @@ _init
 # new
 
 _generate_zettel() {
+  cd "${ZETTEL_DIR}"
   local _id_format
   _id_format="$(date +%Y%m%d%H%M%S)"
-  if [[ -f "${_id_format}-${1}" ]]
+  if [[ -f "${_id_format}-${1:-new_zettel}.md" ]]
   then
     printf ">> zettel already exists in this location.\\n"
     exit 0
@@ -224,22 +225,23 @@ _generate_zettel() {
   read -r -d '' _content <<TEMPLATE || true
 ---
 id: $(date +%Y%m%d%H%M%S)
-title: ${zettel_title}
+title: new_zettel
 date: $(date +"%B %d, %Y")
 tags:
 - $(date +%Y)
 ---
 
-# ${zettel_title}
+# new_zettel
 
 TEMPLATE
 
   printf ">> creating new zettel in %s\\n" "${ZETTEL_DIR}"
-  printf "%s\\n" "${_content}" >> "Baskfile"
+  printf "%s\\n" "${_content}" >> "${_id_format}-${1:new_zettel}.md"
   exit 0
 }
 
 _generate_zet() {
+  cd "${ZETTEL_DIR}"
   if [[ -f "${1:-}" ]]
   then
     printf ">> %s already exists\\n" "${1}"
@@ -272,6 +274,7 @@ TEMPLATE
 }
 
 new() {
+  cd "${ZETTEL_DIR}"
   printf "new() \${PWD}: %s\\n" "${ZETTEL_DIR}"
 
   if [[ -n "${1:-}" ]]
