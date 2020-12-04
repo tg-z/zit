@@ -2,15 +2,86 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-export CMD=( init list backlinks new open sync show push preview tags help )
-source "${0%/*}"/lib/mo
-cat << EOF | mo
-usage: zit COMMAND
+_generate() {
+  if [[ -f "Baskfile" ]]
+  then
+    printf ">> Baskfile already exists in this location.\\n"
+    exit 0
+  fi
 
-available commands:
-{{#CMD}}
-  {{.}}
-{{/CMD}}
+  local _content
+  read -r -d '' _content <<TEMPLATE || true
+describe "hello" <<HEREDOC
+Usage:
+  ${_ME} hello
+Description:
+  Print a greeting.
+HEREDOC
+hello() {
+  echo ">> Hello from ${_ME}!"
+}
+TEMPLATE
 
-use "zit help COMMAND" for more information about a command.
-EOF
+  printf ">> Creating new Baskfile in %s\\n" "${_CALLER_DIRECTORY}"
+  printf "%s\\n" "${_content}" >> "Baskfile"
+  exit 0
+}
+_generate_bask_script() {
+  if [[ -f "${1:-}" ]]
+  then
+    printf ">> %s already exists\\n" "${1}"
+    exit 0
+  fi
+
+  local _script_basename
+  _script_basename="$(basename "${1}")"
+  _debug printf \
+    "_generate_bask_script() \${_script_basename}: %s\\n" \
+    "${_script_basename}"
+
+  local _content
+  read -r -d '' _content <<TEMPLATE || true
+#!/usr/bin/env bash
+###############################################################################
+# ${_script_basename} - a ${_ME} script
+#
+# Get ${_ME}:
+#   https://github.com/xwmx/${_ME}
+#
+# Add this script and the ${_ME} program to your \$PATH.
+#
+# For usage information, run:
+#   ${_script_basename} help
+###############################################################################
+# Load ${_ME}
+#
+# https://github.com/koalaman/shellcheck/wiki/SC1090
+# shellcheck source=/dev/null
+source "\$(command -v ${_ME})"
+describe "hi" <<HEREDOC
+Usage:
+  \$_ME hi
+Description:
+  Print a greeting.
+HEREDOC
+hi() {
+  echo ">> Hi from ${_script_basename}!"
+}
+_init
+TEMPLATE
+
+  printf ">> Creating new bask script: %s\\n" "${1}"
+  printf "%s\\n" "${_content}" >> "${1}"
+  chmod +x "${1}"
+  exit 0
+}
+new() {
+  _debug printf "new() \${PWD}: %s\\n" "${_CALLER_DIRECTORY}"
+
+  if [[ -n "${1:-}" ]]
+  then
+    _generate_bask_script "${1}"
+  else
+    _generate
+  fi
+}

@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-###############################################################################
 # zit - a zettelkasten management tool
 #
 # get bask:
@@ -50,13 +49,6 @@ Usage:
 
 Description:
   With no argument, list all tags found in notes. Otherwise list all notes containing any of the given tags.
-HEREDOC
-
-desc "new" <<HEREDOC
-Usage: $_ME n|new <TITLE>
-
-Description:
-  Create a new note with the given title.
 HEREDOC
 
 desc "sync" <<HEREDOC
@@ -155,8 +147,6 @@ list() {
     fd 20 -e md | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//'
 }
 
-
-
 preview() {
   cd "${ZETTEL_DIR}"
   command -v mlp &> /dev/null
@@ -207,15 +197,19 @@ push() {
   git push > /dev/null 2>&1
   echo "changes pushed"
 }
-_init
 
-# new
+desc "new" <<HEREDOC
+Usage: $_ME n|new <TITLE>
 
-_generate_zettel() {
+Description:
+  Create a new note with the given title.
+HEREDOC
+
+_generate() {
   cd "${ZETTEL_DIR}"
   local _id_format
   _id_format="$(date +%Y%m%d%H%M%S)"
-  if [[ -f "${_id_format}-${1:-new_zettel}.md" ]]
+  if [[ -f "${_id_format}"-"${1:-new_zettel}".md ]]
   then
     printf ">> zettel already exists in this location.\\n"
     exit 0
@@ -240,55 +234,10 @@ TEMPLATE
   exit 0
 }
 
-_generate_zet() {
-  cd "${ZETTEL_DIR}"
-  if [[ -f "${1:-}" ]]
-  then
-    printf ">> %s already exists\\n" "${1}"
-    exit 0
-  fi
-
-  local _script_basename
-  _script_basename="$(basename "${1}")"
-  _debug printf \
-    "_generate_bask_script() \${_script_basename}: %s\\n" \
-    "${_script_basename}"
-
-  local _content
-  read -r -d '' _content <<TEMPLATE || true
----
-id: $(date +%Y%m%d%H%M%S)
-title: ${zettel_title}
-date: $(date +"%B %d, %Y")
-tags:
-- $(date +%Y)
----
-
-# ${zettel_title}
-
-TEMPLATE
-
-  printf ">> creating new zet: %s\\n" "${1}"
-  printf "%s\\n" "${_content}" >> "${1}"
-  exit 0
-}
-
 new() {
   cd "${ZETTEL_DIR}"
   printf "new() \${PWD}: %s\\n" "${ZETTEL_DIR}"
+  _generate "${1}"
+}
+_init
 
-  if [[ -n "${1:-}" ]]
-  then
-    _generate_zet "${1}"
-  else
-    _generate_zettel
-  fi
-}
-x-new() {
-    cd "${ZETTEL_DIR}"
-    local zettel_id_format="$(date +%Y%m%d%H%M%S)"
-    local ZET_ID="${zettel_id_format}"
-    local zettel_title="${1:-new-zettel}"
-    local zettel_date_format="$(date +"%B %d, %Y")"
-    local zettel_tag_format="$(date +%Y)"
-}
