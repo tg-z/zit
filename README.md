@@ -2,7 +2,7 @@
 
 a commandline tool for knowledge management using the zettelkasten method.
 
-the vim plugin in this repo is inspired by [vim-zettel](https://github.com/michal-h21/vim-zettel). it uses the [Zettelkasten](https://zettelkasten.de/) method alongside vimwiki.
+the vim plugin in this repo is inspired by [vim-zettel](https://github.com/michal-h21/vim-zettel). it uses the [zettelkasten](https://zettelkasten.de/) method alongside vimwiki.
 
 ## install
 ```sh
