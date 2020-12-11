@@ -22,6 +22,7 @@ IFS=$'\n\t'
 
 DEFAULT_COMMAND="${DEFAULT_COMMAND:-help}"
 _VERSION="0.0.1"
+_ME="${0##*/}"
 
 _command_exists() {
   hash "${1}" 2>/dev/null
@@ -68,17 +69,65 @@ _debug() {
     } 1>&2
   fi
 }
+_show_info() {
+    printf "%s\n" "
+        __ __
+.-----.|__|  |_
+|-- __||  |   _|
+|_____||__|____|
+${self} is a small tool for managing your zettelkasten.
 
-init() {
-  echo ">> hi from zit!"
+created by tg-z <blue_tooth@zoho.com>
+\n"
+}
+help() {
+  cat <<EOF
+        __ __
+.-----.|__|  |_
+|-- __||  |   _|
+|_____||__|____|
+
+${self} is a small tool for managing your zettelkasten.
+
+created by tg-z <blue_tooth@zoho.com>
+
+Usage:
+  zit <cmd> [--cmd-options] [<arguments>]
+  zit -h | --help
+  zit -V | --version
+
+Options:
+  -h --help    Display this help information.
+  -V --version Display version information and exit.
+
+Help:
+  zit help [<command>]
+
+Home:
+  ${_HOMEPAGE}
+
+Available commands:
+  commands
+  help
+  init
+  list
+  preview
+  push
+  sync
+  tags
+
+EOF
+}
+_init() {
+  echo "hi from zit..."
   if [ -z "$ZETTEL_DIR" ]; then
 	echo "setup your zettel by adding 'export ZETTEL_DIR='~/.local/share/zet'' or add something similar to your zshrc/bashrc."
 	echo "by default, the directory is set to ${XDG_DATA_HOME:-$HOME/.local/share}/zet"
   exit 1
   elif [ -d "$ZETTEL_DIR" ]; then
-	echo ">> your zettel is set up + ready to go :)"
+	exit 0
   else 
-	echo ">> you still need to create the directory."
+	echo "you still need to create your zettelkasten directory."
   fi
 }
 
@@ -96,6 +145,7 @@ preview() {
 tags() {
  awk '/^tags:/ {$1="";print}' "$ZETTEL_DIR"/20* | tr ',' '\n' | awk '{$1=$1}1' | sort -u 
 }
+
 sync() {
   cd "${ZETTEL_DIR}"
   git rev-parse HEAD > /dev/null 2>&1
@@ -111,6 +161,7 @@ push() {
   git push > /dev/null 2>&1
   echo "changes pushed"
 }
+
 _generate() {
   cd "${ZETTEL_DIR}"
   local _id_format
@@ -143,5 +194,5 @@ new() {
   printf "new() \${PWD}: %s\\n" "${ZETTEL_DIR}"
   _generate "${1}"
 }
-init
+_init
 
