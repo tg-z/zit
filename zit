@@ -24,7 +24,7 @@ IFS=$'\n\t'
 
 DEFAULT_COMMAND="${DEFAULT_COMMAND:-help}"
 _VERSION="0.0.1"
-self="${0##*/}"
+_ME="${0##*/}"
 
 source "$(command -v bask)"
 
@@ -125,18 +125,6 @@ _debug() {
     } 1>&2
   fi
 }
-_show_info() {
-    printf "%s\n" "
-        __ __
-.-----.|__|  |_
-|-- __||  |   _|
-|_____||__|____|
-
-${self} is a small tool for managing your zettelkasten.
-
-created by tg-z <blue_tooth@zoho.com>
-\n"
-}
 
 init() {
   echo ">> hi from zit!"
@@ -167,7 +155,7 @@ tags() {
 }
 
 version() {
-  printf "%s %s\n" "${self}" "${_VERSION}"
+  printf "%s %s\n" "${_ME}" "${_VERSION}"
 }
 
 sync() {

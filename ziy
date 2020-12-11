@@ -21,6 +21,7 @@ set -o pipefail
 IFS=$'\n\t'
 
 DEFAULT_COMMAND="${DEFAULT_COMMAND:-help}"
+_HOMEPAGE="https://github.com/tg-z/zit"
 _VERSION="0.0.1"
 _ME="${0##*/}"
 
@@ -75,11 +76,12 @@ _show_info() {
 .-----.|__|  |_
 |-- __||  |   _|
 |_____||__|____|
-${self} is a small tool for managing your zettelkasten.
+${_ME} is a small tool for managing your zettelkasten.
 
 created by tg-z <blue_tooth@zoho.com>
 \n"
 }
+
 help() {
   cat <<EOF
         __ __
@@ -87,39 +89,47 @@ help() {
 |-- __||  |   _|
 |_____||__|____|
 
-${self} is a small tool for managing your zettelkasten.
-
-created by tg-z <blue_tooth@zoho.com>
+${_ME} is a small tool for managing your zettelkasten.
 
 Usage:
-  zit <cmd> [--cmd-options] [<arguments>]
+  zit <cmd> [--cmd-options] [<args>]
   zit -h | --help
   zit -V | --version
 
 Options:
-  -h --help    Display this help information.
-  -V --version Display version information and exit.
+  -h --help        Display this help information.
+  -V --version     Display version information and exit.
 
 Help:
-  zit help [<command>]
+  zit help [<cmd>]
 
 Home:
   ${_HOMEPAGE}
 
 Available commands:
-  commands
+  cmd
   help
   init
   list
+  new
+  open
   preview
   push
   sync
+  show
   tags
-
 EOF
 }
 _init() {
-  echo "hi from zit..."
+printf "%s\n" "
+        __ __
+.-----.|__|  |_
+|-- __||  |   _|
+|_____||__|____|
+
+${_ME} is a small tool for managing your zettelkasten.
+"
+
   if [ -z "$ZETTEL_DIR" ]; then
 	echo "setup your zettel by adding 'export ZETTEL_DIR='~/.local/share/zet'' or add something similar to your zshrc/bashrc."
 	echo "by default, the directory is set to ${XDG_DATA_HOME:-$HOME/.local/share}/zet"
