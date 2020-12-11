@@ -1,18 +1,16 @@
 #!/usr/bin/env bash
-# zit - a zettelkasten management tool
-
-# get bask:
-#   https://github.com/xwmx/bask
-
-# get zit:
-#   https://github.com/tg-z/zit
-
-# add this script and the bask program to your $PATH.
-
+###############################################################################
+# ziy - a zettelkasten management tool
+#
+# get ziy:
+#   https://github.com/tg-z/zit/blob/main/ziy
+#
+# Dependencies:
+#
 # For usage information, run:
-#   zit help
+#   ziy help
 
-# load bask
+###############################################################################
 
 # https://github.com/koalaman/shellcheck/wiki/SC1090
 # shellcheck source=/dev/null
@@ -24,61 +22,6 @@ IFS=$'\n\t'
 
 DEFAULT_COMMAND="${DEFAULT_COMMAND:-help}"
 _VERSION="0.0.1"
-self="${0##*/}"
-
-source "$(command -v bask)"
-
-desc "init" <<HEREDOC
-Usage:
-  $_ME init
-
-Description:
-  With no argument, checks if ZETTEL_DIR exists. If it has not been set up yet it will create a directory in the XDG_DATA_HOME called zet.
-HEREDOC
-
-desc "list" <<HEREDOC
-Usage:
-  $_ME ls|[list]
-
-Description:
-  With no argument, list all notes. Otherwise list notes containing any of the given patterns.
-HEREDOC
-
-desc "tags" <<HEREDOC
-Usage:
-  $_ME t|tags [TAG [TAG ...]]
-
-Description:
-  With no argument, list all tags found in notes. Otherwise list all notes containing any of the given tags.
-HEREDOC
-
-desc "sync" <<HEREDOC
-Usage: $_ME sync
-
-Description:
-  Synchronize ZETTEL_DIR with the git remote, if one is configured.
-HEREDOC
-
-desc "preview" <<HEREDOC
-Usage: $_ME preview
-
-Description:
-  View notes as HTML. Run pip install -U markdown_live_preview
-HEREDOC
-
-desc "push" <<HEREDOC
-Usage: $_ME push
-
-Description:
-  Push local changes to remote.
-HEREDOC
-
-desc "version" <<HEREDOC
-Usage: $_ME version
-
-Description:
-  Display version information.
-HEREDOC
 
 _command_exists() {
   hash "${1}" 2>/dev/null
@@ -125,18 +68,6 @@ _debug() {
     } 1>&2
   fi
 }
-_show_info() {
-    printf "%s\n" "
-        __ __
-.-----.|__|  |_
-|-- __||  |   _|
-|_____||__|____|
-
-${self} is a small tool for managing your zettelkasten.
-
-created by tg-z <blue_tooth@zoho.com>
-\n"
-}
 
 init() {
   echo ">> hi from zit!"
@@ -165,11 +96,6 @@ preview() {
 tags() {
  awk '/^tags:/ {$1="";print}' "$ZETTEL_DIR"/20* | tr ',' '\n' | awk '{$1=$1}1' | sort -u 
 }
-
-version() {
-  printf "%s %s\n" "${self}" "${_VERSION}"
-}
-
 sync() {
   cd "${ZETTEL_DIR}"
   git rev-parse HEAD > /dev/null 2>&1
@@ -185,14 +111,6 @@ push() {
   git push > /dev/null 2>&1
   echo "changes pushed"
 }
-
-describe "new" <<HEREDOC
-Usage: $_ME n|new <TITLE>
-
-Description:
-  Create a new note with the given title.
-HEREDOC
-
 _generate() {
   cd "${ZETTEL_DIR}"
   local _id_format
@@ -212,9 +130,7 @@ date: $(date +"%B %d, %Y")
 tags:
 - $(date +%Y)
 ---
-
 # new_zettel
-
 TEMPLATE
 
   printf ">> creating new zettel in %s\\n" "${ZETTEL_DIR}"
@@ -227,6 +143,5 @@ new() {
   printf "new() \${PWD}: %s\\n" "${ZETTEL_DIR}"
   _generate "${1}"
 }
-
-_init
+init
 
