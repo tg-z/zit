@@ -24,7 +24,21 @@ DEFAULT_COMMAND="${DEFAULT_COMMAND:-help}"
 _HOMEPAGE="https://github.com/tg-z/zit"
 _VERSION="0.0.1"
 _ME="${0##*/}"
-
+_BUILTIN_COMMANDS=(
+  "backlinks"
+  "commands"
+  "help"
+  "init"
+  "list"
+  "new"
+  "open"
+  "preview"
+  "push"
+  "sync"
+  "show"
+  "tags"
+  "version"
+)
 _command_exists() {
   hash "${1}" 2>/dev/null
 }
@@ -107,7 +121,7 @@ Home:
   ${_HOMEPAGE}
 
 Available commands:
-  cmd
+  commands
   help
   init
   list
@@ -118,8 +132,14 @@ Available commands:
   sync
   show
   tags
+  version
 EOF
 }
+
+version() {
+  printf "%s\\n" "${_VERSION}"
+}
+
 _init() {
 printf "%s\n" "
         __ __
@@ -199,10 +219,81 @@ TEMPLATE
   exit 0
 }
 
+# Command List ################################################################
+
+# `commands` behaves differently depending on whether this program is sourced
+# by a dependent script or whether it's being run directly with commands
+# defined in a Baskfile. Since the command list for a dependent script is
+# more limited and only includes commands relevant to that script itself, the
+# '--group' option is not included.
+if _is_sourced
+then
+  describe "commands" <<HEREDOC
+Usage:
+  ${_ME} commands --raw
+Options:
+  --raw      Display the command list without formatting.
+Description:
+  Display the list of available commands.
+HEREDOC
+  commands() {
+    if [[ "${1:-}" == "--raw" ]]
+    then
+      printf "%s\\n" "${_DEFINED_COMMANDS[@]}"
+    else
+      printf "Available commands:\\n"
+      printf "  %s\\n" "${_DEFINED_COMMANDS[@]}"
+    fi
+  }
+else
+  describe "commands" <<HEREDOC
+Usage:
+  ${_ME} commands [--raw | --grouped]
+  ${_ME} commands alias <name> <alias>
+Options:
+  --raw      Display the command list without formatting.
+  --grouped  Display the list of commands with default and locally defined
+             commands in labeled groups.
+Subcommands:
+  alias      Create an <alias> of a given command <name>, with linked help.
+Description:
+  Display the list of available commands.
+HEREDOC
+  commands() {
+    case "${1:-}" in
+      --raw)
+        printf "%s\\n" "${_DEFINED_COMMANDS[@]}"
+        ;;
+      --grouped)
+        printf "Default commands:\\n"
+        printf "  %s\\n" "${_BUILTIN_COMMANDS[@]}"
+
+        # Only display local command section when defined tasks are available.
+        if [[ -n "${_LOCAL_COMMANDS[*]:-}" ]]
+        then
+          printf "\\nLocal commands:\\n"
+          printf "  %s\\n" "${_LOCAL_COMMANDS[@]:-}"
+        fi
+        ;;
+      alias)
+        if [[ -z "${2:-}" ]] || [[ -z "${3:-}" ]]
+        then
+          _exit_1 _help "commands"
+        else
+          _alias_subcommand "${2:-}" "${3:-}"
+        fi
+        ;;
+      *)
+        printf "Available commands:\\n"
+        printf "  %s\\n" "${_DEFINED_COMMANDS[@]}"
+        ;;
+    esac
+  }
+fi
+
 new() {
   cd "${ZETTEL_DIR}"
   printf "new() \${PWD}: %s\\n" "${ZETTEL_DIR}"
   _generate "${1}"
 }
-_init
-
+_init "${@}"

@@ -215,6 +215,4 @@ new() {
   printf "new() \${PWD}: %s\\n" "${ZETTEL_DIR}"
   _generate "${1}"
 }
-
-_init
-
+_init "${@}"
