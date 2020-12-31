@@ -23,7 +23,7 @@ set -o pipefail
 IFS=$'\n\t'
 
 DEFAULT_COMMAND="${DEFAULT_COMMAND:-help}"
-_VERSION="0.0.1"
+_VERSION="1.0.0"
 _ME="${0##*/}"
 
 source "$(command -v bask)"
@@ -217,13 +217,13 @@ _generate() {
   read -r -d '' _content <<TEMPLATE || true
 ---
 id: $(date +%Y%m%d%H%M%S)
-title: new_zettel
+title: new
 date: $(date +"%B %d, %Y")
 tags:
 - $(date +%Y)
 ---
 
-# new_zettel
+# new
 
 TEMPLATE
 
