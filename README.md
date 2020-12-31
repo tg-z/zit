@@ -2,7 +2,7 @@
 
 a commandline tool for knowledge management using the zettelkasten method.
 
-the vim plugin in this repo is inspired by [vim-zettel](https://github.com/michal-h21/vim-zettel). it uses the [zettelkasten](https://zettelkasten.de/) method alongside vimwiki.
+the vim plugin i use alongside zit is [vim-zettel](https://github.com/michal-h21/vim-zettel). it uses the [zettelkasten](https://zettelkasten.de/) method alongside [vimwiki](https://github.com/vimwiki/vimwiki).
 
 ## install
 ```sh
@@ -11,12 +11,6 @@ cd zit
 make
 make install # to add to path
 ```
-
-## vim
-
-    call plug#begin()
-    Plug 'tg-z/zit'
-    call plug#end()
 
 ## usage
 
