@@ -13,7 +13,12 @@ DEFAULT_COMMAND="${DEFAULT_COMMAND:-help}"
 COPY_FILE_FLAG=0
 COPY_ID_FLAG=0
 
-[ -z "$EDITOR" ] && EDITOR="vim"
+[ -z "${EDITOR}" ] && EDITOR="vim"
+
+if [[ ${#} -eq 0 ]]; then
+   help
+fi
+
 if [[ -n "${ZETTEL_DIR}" ]]; then
   NOTE_DIR="$ZETTEL_DIR"
 else
@@ -26,6 +31,22 @@ fi
 # else
 #     terminal-notifier -message "opening" "${input}"
 # fi
+
+print_info() {
+    # $1: info message
+    printf "%b\n" "\033[32mINFO\033[0m ${1}" >&2
+}
+
+print_warn() {
+    # $1: warning message
+    printf "%b\n" "\033[33mWARNING\033[0m ${1}" >&2
+}
+
+print_error() {
+    # $1: error message
+    printf "%b\n" "\033[31mERROR\033[0m ${1}" >&2
+    exit 1
+}
 
 copy_string() {
   if [ -x "$(command -v xclip)" ]; then
@@ -235,43 +256,34 @@ Available commands:
 EOF
 }
 
-help() {
+banner() {
   cat <<EOF
        __ __   
 .-----|__|  |_ 
 |-- __|  |   _|
 |_____|__|____|
-               
+
+EOF
+}
+
+help() {
+banner
+cat <<EOF
 ${_ME} - a small tool for managing your zettelkasten.
 
 Usage:
-  ${_ME} <cmd> <--options> <args>
-  ${_ME} -h, --help
-Options:
-  -i --id          Copy zettel id after running command.
-  -f --file        Copy zettel location/path after running command.
-  -h --help        Display this help information.
-  -V --version     Display version information and exit.
+  ${_ME} <cmd> --options <args>
 Help:
   ${_ME} help <cmd>
+Options:
+  -i, --id          Copy zettel id after running command.
+  -f, --file        Copy zettel location/path after running command.
+  -h, --help        Display this help information.
+  -V, --version     Display version information and exit.
 Home:
   ${_HOMEPAGE}
-Available commands:
-  commands
-  find
-  help
-  id
-  index
-  list
-  new
-  open
-  preview
-  push
-  sync
-  show
-  tag
-  version
 EOF
+commands
 }
 
 while getopts 'fihV' flag; do
@@ -287,10 +299,12 @@ while getopts 'fihV' flag; do
     h)
       shift
       help
+      exit 0
       ;;
      V)
       shift
       printf "%s %s\n" "${_ME}" "${_VERSION}"
+      exit 0
       ;;
      *) printf "command '%s' not found\n" "${1}" >&2
       false
@@ -359,9 +373,8 @@ case "${1:-help}" in
     shift
     printf "%s %s\n" "${_ME}" "${_VERSION}"
     ;;
-  *)
-    printf "command '%s' not found\n" "${1}" >&2
+  *) 
+    print_error "command not found\n" >&2
     false
     ;;
 esac
-
