@@ -7,7 +7,7 @@ set -o pipefail
 IFS=$'\n\t'
 
 _ME="${0##*/}"
-_VERSION="0.0.1"
+_VERSION="1.0.1"
 _HOMEPAGE="https://github.com/tg-z/zit"
 DEFAULT_COMMAND="${DEFAULT_COMMAND:-help}"
 COPY_FILE_FLAG=0
@@ -90,7 +90,7 @@ new() {
 
 ag_check() {
   if [ ! -x "$(command -v ag )" ]; then
-    echo "You need to have silver search (ag) installed to run this command"
+    echo "you need to have the silver searcher (ag) installed to run this command"
     exit 1
   fi
 }
@@ -237,11 +237,11 @@ EOF
 
 help() {
   cat <<EOF
-  __         __ 
- |  |_.-----|  |
- |   _|  -__|  |
- |____|_____|__|
-
+       __ __   
+.-----|__|  |_ 
+|-- __|  |   _|
+|_____|__|____|
+               
 ${_ME} - a small tool for managing your zettelkasten.
 
 Usage:
