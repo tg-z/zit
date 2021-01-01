@@ -183,7 +183,7 @@ get_id() {
 list() {
   ag_check
   cd "${ZETTEL_DIR}"
-  local term="${@}"
+  local term="${*}"
   local results
   results="$(ag -rl --md "${term}" | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//')"
 
