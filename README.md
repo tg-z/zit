@@ -1,6 +1,5 @@
 # `$ zit`
-
-a commandline tool for knowledge management using the zettelkasten method.
+a small tool for managing your zettelkasten.
 
 ## install
 
@@ -23,4 +22,3 @@ ln -s zit ~/bin/zit
 ## usage
 
 i use [vim-zettel](https://github.com/michal-h21/vim-zettel) in tandem with zit. it uses the [zettelkasten](https://zettelkasten.de/) method alongside [vimwiki](https://github.com/vimwiki/vimwiki).
-
