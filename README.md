@@ -9,6 +9,7 @@ dependencies:
 - [fzf](https://github.com/junegunn/fzf): fzf is a general-purpose command-line fuzzy finder.
 - [mlp](https://github.com/ms-jpq/markdown-live-preview): mlp shows a live web preview of markdown docs
 - [bat](https://github.com/sharkdp/bat): A cat(1) clone with wings.
+- [ag](https://geoff.greer.fm/ag/): A code-searching tool similar to ack, but faster.
 
 ```sh
 # clone repo

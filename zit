@@ -215,6 +215,26 @@ index() {
 	_generate_index
 }
 
+commands() {
+    cat <<EOF
+Available commands:
+  commands
+  find
+  help
+  id
+  index
+  list
+  new
+  open
+  preview
+  push
+  sync
+  show
+  tag
+  version
+EOF
+}
+
 help() {
   cat <<EOF
   __         __ 
@@ -225,16 +245,15 @@ help() {
 ${_ME} - a small tool for managing your zettelkasten.
 
 Usage:
-  tel <cmd> [--cmd-options] [<args>]
-  tel -h | --help
-  tel -V | --version
+  ${_ME} <cmd> <--options> <args>
+  ${_ME} -h, --help
 Options:
   -i --id          Copy zettel id after running command.
   -f --file        Copy zettel location/path after running command.
   -h --help        Display this help information.
   -V --version     Display version information and exit.
 Help:
-  tel help [<cmd>]
+  ${_ME} help <cmd>
 Home:
   ${_HOMEPAGE}
 Available commands:
@@ -273,13 +292,17 @@ while getopts 'fihV' flag; do
       shift
       printf "%s %s\n" "${_ME}" "${_VERSION}"
       ;;
-     *) echo "Usage: $0 [-V] [-h]" >&2
-      exit 1
+     *) printf "command '%s' not found\n" "${1}" >&2
+      false
       ;;
 esac
 done
 
 case "${1:-help}" in
+  ("commands")
+    shift
+    commands
+    ;;
   ("new")
     shift
     new "${@}"
@@ -337,9 +360,8 @@ case "${1:-help}" in
     printf "%s %s\n" "${_ME}" "${_VERSION}"
     ;;
   *)
-    shift
-    help
-    exit 1
+    printf "command '%s' not found\n" "${1}" >&2
+    false
     ;;
 esac
 
