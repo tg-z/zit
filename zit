@@ -149,6 +149,20 @@ find_tag() {
   echo "${results}"
 }
 
+list() {
+  ag_check
+  cd "${ZETTEL_DIR}"
+  local term="${*}"
+  local results
+  results="$(ag -rl --md "${term}" | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//')"
+
+  if [[ -z "${term}" ]]; then
+	  fd 20 -e md | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//'
+  elif [[ -n "${term}" ]]; then
+	  echo "${results}"
+  fi
+}
+
 version() {
   printf "%s %s\n" "${_ME}" "${_VERSION}"
 }
@@ -178,20 +192,6 @@ get_id() {
   fi
 
   echo "${id}"
-}
-
-list() {
-  ag_check
-  cd "${ZETTEL_DIR}"
-  local term="${*}"
-  local results
-  results="$(ag -rl --md "${term}" | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//')"
-
-  if [[ -z "${term}" ]]; then
-	  fd 20 -e md | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//'
-  elif [[ -n "${term}" ]]; then
-	  echo "${results}"
-  fi
 }
 
 _edit() {
