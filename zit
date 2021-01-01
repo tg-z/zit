@@ -187,9 +187,9 @@ list() {
   local results
   results="$(ag -rl --md "${term}")"
 
-  if [ -z "${term}" ]; then
+  if [[ -z "${term}" ]]; then
 	  fd 20 -e md | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//'
-  else
+  elif [[ -n "${term}" ]]; then
 	  echo "${results}" | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//'
   fi
 }
@@ -257,7 +257,6 @@ Available commands:
   sync
   show
   tag
-  tags
   version
 EOF
 }
@@ -342,10 +341,6 @@ case "${1:-help}" in
   ("tag")
     shift
     find_tag "${1}"
-    ;;
-  ("tags")
-    shift
-    tags "${1}"
     ;;
   ("id")
     shift
