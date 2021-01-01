@@ -15,10 +15,6 @@ COPY_ID_FLAG=0
 
 [ -z "${EDITOR}" ] && EDITOR="vim"
 
-if [[ ${#} -eq 0 ]]; then
-   help
-fi
-
 if [[ -n "${ZETTEL_DIR}" ]]; then
   NOTE_DIR="$ZETTEL_DIR"
 else
@@ -139,7 +135,7 @@ find_tag() {
   ag_check
   local tag="${1}"
   local results
-  results=$(ag -rl "${tag}" "${ZETTEL_DIR}")
+  results=$(ag -rl --md "${tag}" "${ZETTEL_DIR}")
 
   if [ ! $? -eq 0 ]; then
     echo "No results were found"
@@ -185,8 +181,17 @@ get_id() {
 }
 
 list() {
-    cd "${ZETTEL_DIR}"
-    fd 20 -e md | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//'
+  ag_check
+  cd "${ZETTEL_DIR}"
+  local term="${#}"
+  local results
+  results="$(ag -rl --md "${term}")"
+
+  if [ -z "${term}" ]; then
+	  fd 20 -e md | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//'
+  else
+	  echo "${results}" | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//'
+  fi
 }
 
 _edit() {
@@ -252,6 +257,7 @@ Available commands:
   sync
   show
   tag
+  tags
   version
 EOF
 }
@@ -272,14 +278,14 @@ cat <<EOF
 ${_ME} - a small tool for managing your zettelkasten.
 
 Usage:
-  ${_ME} <cmd> --options <args>
+  ${_ME} <cmd> <options> args
+Options:
+  -i 	Copy zettel id after running command.
+  -f 	Copy zettel location/path after running command.
+  -h 	Display this help information.
+  -V 	Display version information and exit.
 Help:
   ${_ME} help <cmd>
-Options:
-  -i, --id          Copy zettel id after running command.
-  -f, --file        Copy zettel location/path after running command.
-  -h, --help        Display this help information.
-  -V, --version     Display version information and exit.
 Home:
   ${_HOMEPAGE}
 EOF
@@ -336,6 +342,10 @@ case "${1:-help}" in
   ("tag")
     shift
     find_tag "${1}"
+    ;;
+  ("tags")
+    shift
+    tags "${1}"
     ;;
   ("id")
     shift

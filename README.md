@@ -17,7 +17,7 @@ git clone https://github.com/tg-z/zit
 # cd into repo
 cd zit
 # add script to path
-ln -s tel ~/bin/tel
+ln -s zit ~/bin/zit
 ```
 
 ## usage
