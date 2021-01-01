@@ -336,7 +336,7 @@ case "${1:-help}" in
     ;;
   ("list")
     shift
-    list
+    list "${@}"
     ;;
   ("tag")
     shift
