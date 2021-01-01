@@ -185,12 +185,12 @@ list() {
   cd "${ZETTEL_DIR}"
   local term="${#}"
   local results
-  results="$(ag -rl --md "${term}")"
+  results="$(ag -rl --md "${term}" | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//')"
 
   if [[ -z "${term}" ]]; then
 	  fd 20 -e md | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//'
   elif [[ -n "${term}" ]]; then
-	  echo "${results}" | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//'
+	  echo "${results}"
   fi
 }
 
