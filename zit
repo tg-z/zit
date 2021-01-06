@@ -137,7 +137,7 @@ find_tag() {
   local results
   results=$(ag -rl --md "${tag}" "${ZETTEL_DIR}")
 
-  if [ ! $? -eq 0 ]; then
+  if [ ! $results -eq 0 ]; then
     echo "No results were found"
     exit 1
   fi
