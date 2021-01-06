@@ -1,5 +1,5 @@
 # `$ zit`
-a small tool for managing your zettelkasten.
+a small tool for managing your zettelkasten. 📓
 
 ## install
 
