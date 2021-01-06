@@ -1,5 +1,6 @@
-# `$ zit`
-a small tool for managing your zettelkasten. 📓
+<h1 align="center"><code>$ zit</code></h1>
+
+<p align="center">a small tool for managing your zettelkasten. 📓 </p>
 
 ## install
 
