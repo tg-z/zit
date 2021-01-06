@@ -65,6 +65,7 @@ date: $(date +"%B %d, %Y")
 tags:
 - $(date +%Y)
 ---
+
 # new
 TEMPLATE
 
