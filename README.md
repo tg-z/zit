@@ -38,6 +38,8 @@
 git clone https://github.com/tg-z/zit
 # cd into repo
 cd zit
+# create ~/bin directory
+mkdir -p ~/bin
 # add script to path
 ln -s zit ~/bin/zit
 ```
