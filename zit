@@ -119,7 +119,7 @@ find_file() {
   local results
   results=$(ag -rg "${files}" "${ZETTEL_DIR}")
 
-  if [ ! $? -eq 0 ]; then
+  if [ ! "${results}" -eq 0 ]; then
     echo "No results were found"
     exit 1
   fi
