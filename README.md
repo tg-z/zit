@@ -13,7 +13,6 @@
   <a href="#features">features</a> •
   <a href="#install">install</a> •
   <a href="#usage">usage</a> •
-  <a href="#customization">customization</a> •
   <a href="#extra">extra</a><br>
 </p>
 
