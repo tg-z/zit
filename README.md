@@ -27,7 +27,7 @@
 
 ## install
 
-dependencies:
+### dependencies
 - [fd](https://crates.io/crates/fd-find): fd is a simple, fast and user-friendly alternative to [find](https://www.gnu.org/software/findutils/).
 - [fzf](https://github.com/junegunn/fzf): fzf is a general-purpose command-line fuzzy finder.
 - [mlp](https://github.com/ms-jpq/markdown-live-preview): mlp shows a live web preview of markdown docs
