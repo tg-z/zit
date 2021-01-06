@@ -2,17 +2,14 @@
 
 <p align="center">
 
-<a href="https://github.com/tg-z/zit/issues"><img alt="github issues" src="https://img.shields.io/github/issues/tg-z/zit"></a>
+<a href="https://github.com/tg-z/zit/issues"><img alt="github issues" src="https://img.shields.io/github/issues/tg-z/zit?color=ff69b4"></a>
 
-<a href="https://github.com/tg-z/zit/stargazers"><img alt="github stars" src="https://img.shields.io/github/stars/tg-z/zit"></a>
+<a href="https://github.com/tg-z/zit/stargazers"><img alt="github stars" src="https://img.shields.io/github/stars/tg-z/zit?color=ff69b4"></a>
 
 <a href="https://github.com/tg-z/zit/graphs/contributors" alt="contributors">
-<img src="https://img.shields.io/github/contributors/tg-z/zit"/></a>
+<img src="https://img.shields.io/github/contributors/tg-z/zit?color=ff69b4"/></a>
 
 <a href="https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Ftg-z%2Fzit"><img alt="twitter" src="https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Ftg-z%2Fzit"></a>
-
-<a href="https://twitter.com/intent/follow?screen_name=parasite______">
-<img src="https://img.shields.io/twitter/follow/parasite______&style=social&logo=twitter" alt="follow me on twitter"></a>
 
 </p>
 
