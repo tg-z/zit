@@ -9,6 +9,22 @@
 
 <p align="center">a small tool for managing your zettelkasten. 📓 </p>
 
+<p align="center">
+  <a href="#features">features</a> •
+  <a href="#install">install</a> •
+  <a href="#usage">usage</a> •
+  <a href="#customization">customization</a> •
+  <a href="#extra">extra</a><br>
+</p>
+
+## features
+
+### git integration
+`zit` uses `git` to sync zettelkasten files and autocommit changes to remote repository if configured.
+
+### live markdown preview
+`zit` uses `mlp` to preview markdown files before committing them to a remote repository.
+
 ## install
 
 dependencies:
