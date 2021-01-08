@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2124
 
 set -e
 set -o nounset
@@ -80,7 +81,7 @@ new() {
   id=$(date +"%Y%m%d%H%M%S")
   local note_name
   if [[ "$#" -gt 0 ]]; then
-    _note_name="$NOTE_DIR/$id-$*.md"
+    _note_name="$NOTE_DIR/$id-$@.md"
     note_name="$(echo "${_note_name}" | tr ' ' '_' | tr '[:upper:]' '[:lower:]')"
 
   else
