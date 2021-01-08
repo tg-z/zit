@@ -37,7 +37,6 @@ _error() {
     exit 1
 }
 
-
 _generate(){
   cd "${ZETTEL_DIR}"
   local _content
