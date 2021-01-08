@@ -22,13 +22,6 @@ else
   NOTE_DIR="./"
 fi
 
-# input="${1}"
-# if [ -z "${input}" ]; then
-#     _edit
-# else
-#     terminal-notifier -message "opening" "${input}"
-# fi
-
 print_info() {
     # $1: info message
     printf "%b\n" "\033[32mINFO\033[0m ${1}" >&2
@@ -117,7 +110,6 @@ ag_check() {
 find_file() {
   ag_check
   local files="${1}"
-  # local results=$(ag -G -g "$id") || true
   local results
   results=$(ag -rg "${files}" "${ZETTEL_DIR}")
 
@@ -311,7 +303,7 @@ while getopts 'fihV' flag; do
       ;;
      V)
       shift
-      printf "%s %s\n" "${_ME}" "${_VERSION}"
+      version
       exit 0
       ;;
      *) printf "command '%s' not found\n" "${1}" >&2
