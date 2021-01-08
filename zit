@@ -10,7 +10,6 @@ IFS=$'\n\t'
 _ME="${0##*/}"
 _VERSION="1.0.1"
 _HOMEPAGE="https://github.com/tg-z/zit"
-DEFAULT_COMMAND="${DEFAULT_COMMAND:-help}"
 COPY_FILE_FLAG=0
 COPY_ID_FLAG=0
 
@@ -22,31 +21,22 @@ else
   NOTE_DIR="./"
 fi
 
-print_info() {
+_info() {
     # $1: info message
     printf "%b\n" "\033[32mINFO\033[0m ${1}" >&2
 }
 
-print_warn() {
+_warn() {
     # $1: warning message
     printf "%b\n" "\033[33mWARNING\033[0m ${1}" >&2
 }
 
-print_error() {
+_error() {
     # $1: error message
     printf "%b\n" "\033[31mERROR\033[0m ${1}" >&2
     exit 1
 }
 
-copy_string() {
-  if [ -x "$(command -v xclip)" ]; then
-    echo "${1}" | xclip -selection c
-  fi
-
-  if [ -x "$(command -v pbcopy)" ]; then
-    echo "${1}" | pbcopy
-  fi
-}
 
 _generate(){
   cd "${ZETTEL_DIR}"
@@ -89,29 +79,64 @@ new() {
   touch "$note_name"
 
   if [[ $COPY_ID_FLAG -eq 1 ]]; then
-    copy_string "$id"
+    _copy "$id"
     echo "${id}"
   fi
 
   if [[ $COPY_FILE_FLAG -eq 1 ]]; then
-    copy_string "${note_name}"
+    _copy "${note_name}"
     echo "${note_name}"
   fi
   _generate "${1}"
 }
 
-ag_check() {
-  if [ ! -x "$(command -v ag )" ]; then
-    echo "you need to have the silver searcher (ag) installed to run this command"
-    exit 1
+_var() {
+  _fzf="$(command -v fzf)"
+  _ag="$(command -v ag)"
+  _fd="$(command -v fd)"
+  _bat="$(command -v bat)"
+  _mlp="$(command -v mlp)"
+}
+
+_check() {
+  _var
+  if [ ! -x "${_fzf}" ]; then
+          echo "you must install fzf to run this command"
+          exit 1
+  fi
+  if [ ! -x "${_ag}" ]; then
+      echo "you must install ag to run this command"
+      exit 1
+  fi
+  if [ ! -x "${_fd}" ]; then
+          echo "you must install fd to run this command"
+          exit 1
+  fi
+  if [ ! -x "${_bat}" ]; then
+          echo "you must install bat to run this command"
+          exit 1
+  fi
+  if [ ! -x "${_mlp}" ]; then
+	  echo "you must install mlp to run this command"
+	  exit 1
+  fi
+}
+
+_copy() {
+  if [ -x "$(command -v xclip)" ]; then
+    echo "${1}" | xclip -selection c
+  fi
+
+  if [ -x "$(command -v pbcopy)" ]; then
+    echo "${1}" | pbcopy
   fi
 }
 
 find_file() {
-  ag_check
+  _check
   local files="${1}"
   local results
-  results=$(ag -rg "${files}" "${ZETTEL_DIR}")
+  results=$("${_ag}" -rg "${files}" "${ZETTEL_DIR}")
 
   if [ ! "${results}" -eq 0 ]; then
     echo "No results were found"
@@ -119,17 +144,17 @@ find_file() {
   fi
 
   if [[ "${COPY_FILE_FLAG}" -gt 1 ]]; then
-    copy_string "${results}"
+    _copy "${results}"
   fi
 
   echo "${results}"
 }
 
 find_tag() {
-  ag_check
+  _check
   local tag="${1}"
   local results
-  results=$(ag -rl --md "${tag}" "${ZETTEL_DIR}")
+  results=$("${_ag}" -rl --md "${tag}" "${ZETTEL_DIR}")
 
   if [ ! "${results}" -eq 0 ]; then
     echo "No results were found"
@@ -137,21 +162,21 @@ find_tag() {
   fi
 
   if [[ "${COPY_FILE_FLAG}" -eq 1 ]]; then
-    copy_string "${results}"
+    _copy "${results}"
   fi
 
   echo "${results}"
 }
 
 list() {
-  ag_check
+  _check
   cd "${ZETTEL_DIR}"
   local term="${*}"
   local results
-  results="$(ag -rl --md "${term}" | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//')"
+  results="$("${_ag}" -rl --md "${term}" | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//')"
 
   if [[ -z "${term}" ]]; then
-	  fd 20 -e md | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//'
+	  "${_fd}" 20 -e md | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//'
   elif [[ -n "${term}" ]]; then
 	  echo "${results}"
   fi
@@ -182,14 +207,15 @@ get_id() {
   id=$(echo "${1}" | grep -Eo "[[:digit:]]{14}")
 
   if [[ $COPY_ID_FLAG -eq 1 ]]; then
-    copy_string "${id}"
+    _copy "${id}"
   fi
 
   echo "${id}"
 }
 
 _edit() {
-    fd 20 -e md | fzf -m --preview 'glow -s dark {}' --border=rounded --cycle --height '95%' --preview-window='right:70%' | xargs "${EDITOR}"
+    _check
+    "${_fd}" 20 -e md | "${_fzf}" -m --preview 'glow -s dark {}' --border=rounded --cycle --height '95%' --preview-window='right:70%' | xargs "${EDITOR}"
 }
 
 open() {
@@ -198,15 +224,14 @@ open() {
     then
 	    _edit
     else
-    fd 20 -e md | rg "${1}" | xargs "${EDITOR}"
+    "${_fd}" 20 -e md | rg "${1}" | xargs "${EDITOR}"
     fi
 }
 
 preview() {
+  _check
   cd "${ZETTEL_DIR}"
-  command -v mlp &> /dev/null
-  command -v pandoc &> /dev/null
-  fd 20 -e md | fzf -m --preview 'glow -s dark {}' --border=rounded --cycle --height '95%' --preview-window='right:70%' | xargs mlp
+  "${_fd}" 20 -e md | "${_fzf}" -m --preview 'glow -s dark {}' --border=rounded --cycle --height '95%' --preview-window='right:70%' | xargs "${_mlp}"
 }
 
 _generate_index() {
@@ -306,7 +331,7 @@ while getopts 'fihV' flag; do
       version
       exit 0
       ;;
-     *) printf "command '%s' not found\n" "${1}" >&2
+     *) _error "command not found\n" >&2
       false
       ;;
 esac
@@ -374,7 +399,7 @@ case "${1:-help}" in
     printf "%s %s\n" "${_ME}" "${_VERSION}"
     ;;
   *) 
-    print_error "command not found\n" >&2
+    _error "command not found\n" >&2
     false
     ;;
 esac
