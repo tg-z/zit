@@ -155,11 +155,6 @@ find_tag() {
   local results
   results=$("${_ag}" -rl --md "${tag}" "${ZETTEL_DIR}")
 
-  if [ ! "${results}" -eq 0 ]; then
-    echo "No results were found"
-    exit 1
-  fi
-
   if [[ "${COPY_FILE_FLAG}" -eq 1 ]]; then
     _copy "${results}"
   fi
