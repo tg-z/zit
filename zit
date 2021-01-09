@@ -183,10 +183,11 @@ version() {
 
 sync() {
   _check
+  cd "${ZETTEL_DIR}"
   gr="$(git rev-parse --show-toplevel)"
   cd "${gr}" || exit
-  tput setaf 5;pwd;tput sgr0
-  if "(git status | grep -c "Your branch is ahead")" > /dev/null; then
+  # tput setaf 5;pwd;tput sgr0
+  if git status | grep -c 'Your branch is ahead' > /dev/null; then
 	  git push
   else
 	  read -r -p "commit message: " desc
@@ -199,13 +200,6 @@ sync() {
   # read -r -p "commit message: " desc
   # git push
   # echo "pushing changes"
-}
-
-push() {
-  cd "${ZETTEL_DIR}"
-  git rev-parse HEAD > /dev/null 2>&1
-  git push > /dev/null 2>&1
-  echo "changes pushed"
 }
 
 get_id() {
@@ -280,7 +274,6 @@ Available commands:
   new
   open
   preview
-  push
   show
   sync
   tag
@@ -380,10 +373,6 @@ case "${1:-help}" in
   ("preview")
     shift
     preview
-    ;;
-  ("push")
-    shift
-    push
     ;;
   ("show")
     shift
