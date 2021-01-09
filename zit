@@ -58,6 +58,7 @@ TEMPLATE
 }
 
 new() {
+  _check
   cd "${ZETTEL_DIR}"
   local id
   id=$(date +"%Y%m%d%H%M%S")
@@ -181,12 +182,23 @@ version() {
 }
 
 sync() {
-  cd "${ZETTEL_DIR}"
-  git rev-parse HEAD > /dev/null 2>&1
-  git commit -am "auto commit + push on $(date)" > /dev/null 2>&1
-  echo "committing changes"
-  git push
-  echo "pushing changes"
+  _check
+  gr="$(git rev-parse --show-toplevel)"
+  cd "${gr}" || exit
+  tput setaf 5;pwd;tput sgr0
+  if "(git status | grep -c "Your branch is ahead")" > /dev/null; then
+	  git push
+  else
+	  read -r -p "commit message: " desc
+	  git commit -am "${desc}"
+	  git push
+	  _info "changes synced ✓"
+  fi
+  # git rev-parse HEAD > /dev/null 2>&1
+  # git commit -am "auto commit + push on $(date)" > /dev/null 2>&1
+  # read -r -p "commit message: " desc
+  # git push
+  # echo "pushing changes"
 }
 
 push() {
@@ -213,6 +225,7 @@ _edit() {
 }
 
 open() {
+    _check
     cd "${ZETTEL_DIR}"
     if [ -z "${1}" ];
     then
