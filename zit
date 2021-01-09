@@ -195,11 +195,6 @@ sync() {
 	  git push
 	  _info "changes synced ✓"
   fi
-  # git rev-parse HEAD > /dev/null 2>&1
-  # git commit -am "auto commit + push on $(date)" > /dev/null 2>&1
-  # read -r -p "commit message: " desc
-  # git push
-  # echo "pushing changes"
 }
 
 get_id() {
