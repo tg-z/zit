@@ -273,8 +273,8 @@ Available commands:
   open
   preview
   push
-  sync
   show
+  sync
   tag
   version
 EOF
@@ -341,10 +341,6 @@ case "${1:-help}" in
     shift
     commands
     ;;
-  ("new")
-    shift
-    new "${@}"
-    ;;
   ("find")
     shift
     find_file "${1}"
@@ -352,14 +348,6 @@ case "${1:-help}" in
   ("help")
     shift
     help
-    ;;
-  ("list")
-    shift
-    list "${@}"
-    ;;
-  ("tag")
-    shift
-    find_tag "${1}"
     ;;
   ("id")
     shift
@@ -369,9 +357,13 @@ case "${1:-help}" in
     shift
     index
     ;;
-  ("usage")
+  ("list")
     shift
-    usage
+    list "${@}"
+    ;;
+  ("new")
+    shift
+    new "${@}"
     ;;
   ("open")
     shift
@@ -385,13 +377,17 @@ case "${1:-help}" in
     shift
     push
     ;;
+  ("show")
+    shift
+    show
+    ;;
   ("sync")
     shift
     sync
     ;;
-  ("show")
+  ("tag")
     shift
-    show
+    find_tag "${1}"
     ;;
   ("version")
     shift
