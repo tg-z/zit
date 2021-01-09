@@ -171,8 +171,10 @@ list() {
   results="$("${_ag}" -rl --md "${term}" | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//')"
 
   if [[ -z "${term}" ]]; then
+	  printf "id title\n"
 	  "${_fd}" 20 -e md | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//'
   elif [[ -n "${term}" ]]; then
+	  printf "id title\n"
 	  echo "${results}"
   fi
 }
