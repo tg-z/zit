@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2124
+# shellcheck disable=SC2124,SC2001
 
 set -e
 set -o nounset
@@ -43,19 +43,19 @@ _generate(){
   read -r -d '' _content <<TEMPLATE || true
 ---
 id: $(date +%Y%m%d%H%M%S)
-title: $(echo "${note_name}" | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//')
+title: $(echo "${note_name:15}" | sed 's/.md//')
 date: $(date +"%B %d, %Y")
 tags:
 - $(date +%Y)
 ---
 
-# $(echo "${note_name}" | sed 's/\([0-9]*\).-*/\1 /' | sed 's/.md//')
+# $(echo "${note_name:15}" | sed 's/.md//')
 
 
 TEMPLATE
 
   printf "creating new zettel in %s\\n" "${ZETTEL_DIR}"
-  printf "%s\\n" "${_content}" >> "${note_name}"
+  printf "%s\\n" "${_content}" >> "${note_name}.md"
   exit 0
 }
 
@@ -66,7 +66,7 @@ new() {
   id=$(date +"%Y%m%d%H%M%S")
   local note_name
   if [[ "$#" -gt 0 ]]; then
-    _note_name="$NOTE_DIR/$id-$@.md"
+    _note_name="$id-$@"
     note_name="$(echo "${_note_name}" | tr ' ' '_' | tr '[:upper:]' '[:lower:]')"
 
   else
@@ -78,7 +78,7 @@ new() {
     exit 0
   fi
 
-  touch "$note_name"
+  touch "$NOTE_DIR/$note_name.md"
 
   if [[ $COPY_ID_FLAG -eq 1 ]]; then
     _copy "$id"
