@@ -275,39 +275,6 @@ TEMPLATE
   exit 0
 }
 
-_generate_yml() {
-  _check
-  cd "${ZETTEL_DIR}"
-  local _content
-  # head -n 5 20* -q > .index.yml
-  read -r -d '' _content <<TEMPLATE || true
-id: $(date +%Y%m%d%H%M%S)
-title: new
-date: $(date +"%B %d, %Y")
-tags:
-- $(date +%Y)
----
-
-TEMPLATE
-  printf "%s\\n" "${_content}"
-  exit 0
-}
-
-_generate_csv() {
-  _check
-  cd "${ZETTEL_DIR}"
-  local _content
-  # head -n 6 20* -q > .index.yml
-  zit list | sd ' ' ',' > .index.csv
-  read -r -d '' _content <<TEMPLATE || true
-$(date +%Y%m%d%H%M%S),new,$(date +"%B %d"),$(date +%Y)
-
-$(while read -r file; do echo "$file"; done < .zettel.csv)
-TEMPLATE
-
-  printf "%s\\n" "${_content}"
-  exit 0
-}
 
 index() {
 	_generate_index
