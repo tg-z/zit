@@ -96,7 +96,7 @@ _var() {
   _fzf="$(command -v fzf)"
   _ag="$(command -v ag)"
   _fd="$(command -v fd)"
-  _sd="$(command -v sd)"
+  _glow="$(command -v glow)"
   _rg="$(command -v rg)"
   _bat="$(command -v bat)"
   _mlp="$(command -v mlp)"
@@ -124,8 +124,8 @@ _check() {
 	  _warn "you must install mlp to run this command"
 	  exit 1
   fi
-  if [ ! -x "${_sd}" ]; then
-	  _warn "you must install sd to run this command"
+  if [ ! -x "${_glow}" ]; then
+	  _warn "you must install glow to run this command"
 	  exit 1
   fi
   if [ ! -x "${_rg}" ]; then

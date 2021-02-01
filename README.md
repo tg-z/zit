@@ -31,6 +31,7 @@
 - [bat](https://github.com/sharkdp/bat): A cat(1) clone with wings.
 - [ag](https://geoff.greer.fm/ag/): A code-searching tool similar to ack, but faster.
 - [glow](https://github.com/charmbracelet/glow): Render markdown on the CLI, with pizzazz! 💅
+- [ripgrep](https://github.com/BurntSushi/ripgrep): ripgrep recursively searches directories for a regex pattern while respecting your gitignore.
 
 ## install
 
