@@ -16,7 +16,7 @@
   <a href="#extra">extra</a><br>
 </p>
 
-## features
+# features
 
 ### git integration
 `zit` uses `git` to sync zettelkasten files and autocommit changes to remote repository if configured.
@@ -47,6 +47,57 @@ ln -s zit ~/bin/zit
 ```
 
 ## usage
+```sh
+       __ __
+.-----|__|  |_
+|-- __|  |   _|
+|_____|__|____|
 
+zit - a small tool for managing your zettelkasten.
+
+Usage:
+  zit <cmd> <options> args
+Options:
+  -i 	Copy zettel id after running command.
+  -f 	Copy zettel location/path after running command.
+  -h 	Display this help information.
+  -V 	Display version information and exit.
+Help:
+  zit help
+Home:
+  https://github.com/tg-z/zit
+Available commands:
+  commands
+  find
+  help
+  id
+  index
+  list
+  new
+  open
+  preview
+  show
+  sync
+  tag
+```
+```sh
+# print help text
+zit help
+
+# list files (pretty)
+zit list
+
+# print available commands
+zit commands
+
+# search for pattern in files and show context
+zit show 'unix'
+
+# commit and push changed files to remote git repo
+zit sync
+
+# print files with text that match pattern
+zit find 'gnu'
+```
 ## extra
 i use [vim-zettel](https://github.com/michal-h21/vim-zettel) in tandem with zit. it uses the [zettelkasten method](https://zettelkasten.de/) alongside [vimwiki](https://github.com/vimwiki/vimwiki).
