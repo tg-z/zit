@@ -32,13 +32,14 @@
 - [mlp](https://github.com/ms-jpq/markdown-live-preview): mlp shows a live web preview of markdown docs
 - [bat](https://github.com/sharkdp/bat): A cat(1) clone with wings.
 - [ag](https://geoff.greer.fm/ag/): A code-searching tool similar to ack, but faster.
+- [glow](https://github.com/charmbracelet/glow): Render markdown on the CLI, with pizzazz! 💅
 
 ```sh
 # clone repo
 git clone https://github.com/tg-z/zit
 # cd into repo
 cd zit
-# create ~/bin directory
+# create ~/bin directory if you haven't already
 mkdir -p ~/bin
 # add script to path
 ln -s zit ~/bin/zit
