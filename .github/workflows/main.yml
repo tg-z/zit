@@ -1,10 +1,8 @@
 name: ci
-
 on:
   push:
     branch:
       - main
-
 jobs:
   ci:
     name: ci
