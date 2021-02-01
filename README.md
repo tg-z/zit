@@ -67,19 +67,20 @@ Help:
 Home:
   https://github.com/tg-z/zit
 Available commands:
-  commands
+  commands  lists all available subcommands.
   find
-  help
+  help       Displays this help text.
   id
-  index
-  list
-  new
+  index      Create markdown index of files.
+  list       With no argument, list all notes. Otherwise list notes containing any of the given patterns.
+  new        Create a new note with the given title.
   open
-  preview
+  preview    View notes as HTML.
   show
-  sync
+  sync       Synchronize $ZETTEL_DIR with the git remote, if one is configured.
   tag
 ```
+__examples__:
 ```sh
 # print help text
 zit help
