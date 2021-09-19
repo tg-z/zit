@@ -252,10 +252,12 @@ preview() {
 }
 
 _generate_index() {
+# $(echo "${note_name:15}" | sed 's/.md//')
   _check
   cd "${ZETTEL_DIR}"
   local _content
-  find 20* -type f > .index
+  find 20* -type f | sort -r > .index
+# find 20* -type f > .index
   read -r -d '' _content <<TEMPLATE || true
 ---
 id: $(date +%Y%m%d%H%M%S)
@@ -267,11 +269,12 @@ tags:
 
 # index
 
-$(while read -r file; do echo "- [$file]($file)"; done < .index)
+$(while read -r file; do echo "- [${file:15}" | sd '.md' '']"($file)"; done < .index)
 
 TEMPLATE
 
-  printf "%s\\n" "${_content}"
+# printf "%s\\n" "${_content}"
+  printf "%s\\n" "${_content}" > index.md
   exit 0
 }
 
