@@ -8,7 +8,7 @@ set -o pipefail
 IFS=$'\n\t'
 
 _ME="${0##*/}"
-_VERSION="1.0.1"
+_VERSION="1.1.0"
 _HOMEPAGE="https://github.com/tg-z/zit"
 COPY_FILE_FLAG=0
 COPY_ID_FLAG=0
@@ -283,18 +283,18 @@ index() {
 commands() {
     cat <<EOF
 Available commands:
-  commands
-  find
-  help
-  id
-  index
-  list
-  new
-  open
-  preview
-  show
-  sync
-  tag
+  commands  Lists available subcommands.
+  find      Find a file by name.
+  help      Display help information.
+  id        Outputs 14 character zettel id.
+  index     Create a markdown index of files.
+  list      List all notes containing given pattern.
+  new       Create a new note with the given title.
+  open      Open a note in default editor.
+  preview   Preview notes as HTML.
+  show      Search file contents and show results in context.
+  sync      Synchronize ZETTEL_DIR with git remote, if configured.
+  tag       Search note tags.
 EOF
 }
 
@@ -314,12 +314,12 @@ cat <<EOF
 ${_ME} - a small tool for managing your zettelkasten.
 
 Usage:
-  ${_ME} <cmd> <options> args
+  ${_ME} <options> <cmd> args
 Options:
-  -i 	Copy zettel id after running command.
-  -f 	Copy zettel location/path after running command.
-  -h 	Display this help information.
-  -V 	Display version information and exit.
+  -i 	Copy zettel id to clipboard after running command.
+  -f 	Copy zettel path after running command.
+  -h 	Display help information.
+  -V 	Display version information.
 Help:
   ${_ME} help
 Home:
