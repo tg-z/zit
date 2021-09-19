@@ -56,29 +56,29 @@ ln -s zit ~/bin/zit
 zit - a small tool for managing your zettelkasten.
 
 Usage:
-  zit <cmd> <options> args
+  zit <options> <cmd> args
 Options:
-  -i 	Copy zettel id after running command.
+  -i 	Copy zettel id to clipboard after running id.
   -f 	Copy zettel location/path after running command.
   -h 	Display this help information.
-  -V 	Display version information and exit.
+  -V 	Display version information.
 Help:
   zit help
 Home:
   https://github.com/tg-z/zit
 Available commands:
-  commands  lists all available subcommands.
-  find
-  help       Displays this help text.
-  id
-  index      Create markdown index of files.
+  commands   Lists available subcommands.
+  find       Find a file by name.
+  help       Display help information.
+  id         Outputs 14 character zettel id.
+  index      Create a markdown index of files.
   list       With no argument, list all notes. Otherwise list notes containing any of the given patterns.
   new        Create a new note with the given title.
-  open
-  preview    View notes as HTML.
-  show
-  sync       Synchronize $ZETTEL_DIR with the git remote, if one is configured.
-  tag
+  open       Open a note in default editor.
+  preview    Preview notes as HTML.
+  show       Search file contents and show results in context.
+  sync       Synchronize $ZETTEL_DIR with the git remote, if configured.
+  tag        Search note tags.
 ```
 __examples__:
 ```sh
@@ -99,6 +99,15 @@ zit sync
 
 # print files with text that match pattern
 zit find 'gnu'
+
+# print zettel id from filename
+zit id 20210101003310-workstation
+20210101003310 # printed zettel id
+
+# copy zettel id to clipboard
+zit -i id 20210101003310-workstation
+20210101003310 # this is copied to clipboard
 ```
+
 ## extra
 i use [vim-zettel](https://github.com/michal-h21/vim-zettel) in tandem with zit. it uses the [zettelkasten method](https://zettelkasten.de/) alongside [vimwiki](https://github.com/vimwiki/vimwiki).
